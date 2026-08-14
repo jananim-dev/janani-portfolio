@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Janani M — Full Stack Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #08060f;
+    --panel: #120e1f;
+    --card: #171227;
+    --ink: #f3f1fa;
+    --ink-soft: #a79fc2;
+    --line: #2a2340;
+    --purple: #8b5cf6;
+    --blue: #38bdf8;
+    --pink: #ec4899;
+    --radius: 16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a { color:inherit; text-decoration:none; }
+  ::selection { background:var(--purple); color:#fff; }
+
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 32px; position:relative; z-index:1; }
+
+  /* glow blobs */
+  .glow{ position:fixed; border-radius:50%; filter:blur(90px); opacity:0.35; z-index:0; pointer-events:none; }
+  .glow-1{ width:420px; height:420px; background:var(--purple); top:-100px; left:-120px; }
+  .glow-2{ width:380px; height:380px; background:var(--blue); top:400px; right:-140px; }
+  .glow-3{ width:340px; height:340px; background:var(--pink); bottom:0; left:20%; }
+
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(8,6,15,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1100px; margin:0 auto; padding:18px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-mark{ font-family:'Sora', sans-serif; font-weight:800; font-size:1.7rem; color:#fff; }
+  .nav-links{ display:flex; gap:26px; font-size:0.92rem; font-weight:800; }
+  .nav-links a{ color:var(--ink-soft); transition:color .2s ease, transform .2s ease; display:inline-block; }
+  .nav-links a:hover{ color:#fff; transform:scale(1.08); }
+
+  /* HERO */
+  .hero{ padding:70px 0 60px; }
+  .hero-inner{ display:flex; align-items:center; gap:50px; }
+  .hero-text{ flex:1; min-width:0; }
+  .hero-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.85rem; font-weight:700;
+    color:#c4b5fd;
+    background:rgba(139,92,246,0.12);
+    border:1px solid rgba(139,92,246,0.35);
+    padding:8px 18px;
+    border-radius:100px;
+    margin-bottom:30px;
+    animation:fadeUp 0.6s ease both;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(16px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .hero-tag .dot{ width:8px; height:8px; border-radius:50%; background:#7fd99a; box-shadow:0 0 8px #7fd99a; }
+  .photo-ring{
+    flex-shrink:0;
+    width:320px; height:320px;
+    border-radius:50%;
+    padding:5px;
+    background:conic-gradient(from 180deg, var(--purple), var(--blue), var(--pink), var(--purple));
+    animation:ringGlow 3s ease-in-out infinite, photoPop 0.8s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes ringGlow{
+    0%, 100%{ box-shadow:0 0 30px rgba(139,92,246,0.4); }
+    50%{ box-shadow:0 0 55px rgba(56,189,248,0.55); }
+  }
+  @keyframes photoPop{
+    from{ opacity:0; transform:scale(0.7); }
+    to{ opacity:1; transform:scale(1); }
+  }
+  .photo-ring img{
+    width:100%; height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid var(--bg);
+    display:block;
+  }
+  .hero h1{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:clamp(2.4rem, 5.5vw, 3.6rem);
+    line-height:1.15;
+    animation:fadeUp 0.6s ease both;
+    animation-delay:0.1s;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(90deg, var(--purple), var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.sub{
+    margin-top:24px;
+    font-size:1.18rem;
+    color:var(--ink-soft);
+    max-width:56ch;
+    animation:fadeUp 0.6s ease both;
+    animation-delay:0.2s;
+  }
+  .hero p.sub strong{ color:#fff; font-weight:700; }
+  .hero-actions{ margin-top:36px; display:flex; gap:14px; flex-wrap:wrap; animation:fadeUp 0.6s ease both; animation-delay:0.3s; }
+  @media (max-width:760px){
+    .hero-inner{ flex-direction:column-reverse; text-align:center; }
+    .photo-ring{ width:220px; height:220px; }
+    .hero-actions{ justify-content:center; }
+  }
+  .btn{
+    font-size:0.95rem; font-weight:700;
+    padding:13px 26px;
+    border-radius:10px;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(90deg, var(--purple), var(--blue));
+    color:#fff;
+    box-shadow:0 0 24px rgba(139,92,246,0.4);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 0 34px rgba(139,92,246,0.6); }
+  .btn-ghost{ border:1.5px solid var(--line); color:var(--ink); background:rgba(255,255,255,0.03); }
+  .btn-ghost:hover{ border-color:var(--purple); color:#fff; }
+
+  section{ padding:60px 0; border-top:1px solid var(--line); }
+  .eyebrow{
+    font-size:0.8rem; font-weight:800;
+    color:var(--blue);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:10px;
+  }
+  .sec-title{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:1.7rem;
+    margin-bottom:30px;
+  }
+
+  /* ABOUT */
+  .about-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:44px; align-items:start; }
+  .about-body p{ color:var(--ink-soft); margin-bottom:16px; max-width:58ch; font-size:1.05rem; }
+  .about-body strong{ color:#fff; font-weight:700; }
+  .stat-block{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px;
+  }
+  .stat-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.9rem;
+  }
+  .stat-row:last-child{ border-bottom:none; }
+  .stat-row .k{ color:var(--ink-soft); }
+  .stat-row .v{ color:#fff; font-weight:700; text-align:right; }
+
+  /* SKILLS — numbered like reference */
+  .skill-numbered{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .skill-num-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    display:flex; gap:14px; align-items:flex-start;
+  }
+  .skill-num{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:1.6rem;
+    background:linear-gradient(180deg, var(--purple), var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1;
+  }
+  .skill-num-title{ font-weight:700; font-size:0.98rem; margin-bottom:4px; }
+  .skill-num-desc{ font-size:0.85rem; color:var(--ink-soft); }
+  .cert-row{ margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cert-chip{
+    display:flex; align-items:center; gap:12px;
+    background:rgba(139,92,246,0.08);
+    border:1px solid rgba(139,92,246,0.3);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .cert-icon{ font-size:1.4rem; }
+  .cert-title{ font-size:0.85rem; font-weight:700; color:#fff; }
+  .cert-sub{ font-size:0.76rem; color:var(--ink-soft); margin-top:2px; }
+  @media (max-width:700px){ .cert-row{ grid-template-columns:1fr; } .skill-numbered{ grid-template-columns:1fr; } }
+  .learning-badge{
+    margin-top:22px;
+    display:flex; align-items:center; gap:10px;
+    background:rgba(56,189,248,0.08);
+    border:1px solid rgba(56,189,248,0.3);
+    border-radius:10px;
+    padding:14px 18px;
+    font-size:0.9rem;
+    color:var(--ink-soft);
+  }
+  .learning-badge strong{ color:#fff; }
+  .learning-dot{ width:8px; height:8px; border-radius:50%; background:var(--blue); flex-shrink:0; box-shadow:0 0 8px var(--blue); animation:pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot{ 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+
+  /* PROJECTS */
+  .project{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px;
+    margin-bottom:20px;
+  }
+  .project-tab{
+    display:inline-block;
+    font-size:0.82rem; font-weight:700;
+    color:var(--blue);
+    margin-bottom:14px;
+  }
+  .project-badge{
+    display:inline-block;
+    font-size:0.76rem; font-weight:700;
+    color:#fbbf24;
+    background:rgba(251,191,36,0.12);
+    border:1px solid rgba(251,191,36,0.3);
+    padding:5px 12px;
+    border-radius:100px;
+    margin-bottom:14px;
+    margin-left:8px;
+  }
+  .project-title{ font-family:'Sora', sans-serif; font-size:1.25rem; font-weight:800; margin-bottom:10px; }
+  .project-desc{ color:var(--ink-soft); font-size:0.98rem; margin-bottom:18px; max-width:64ch; }
+  .project-stack{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .stack-chip{ font-size:0.78rem; font-weight:600; background:var(--panel); border:1px solid var(--line); padding:5px 11px; border-radius:7px; color:var(--ink-soft); }
+  .live-demo-btn{ margin-bottom:20px; }
+  .shot-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .shot-grid img{ width:100%; height:112px; object-fit:cover; border-radius:8px; border:1px solid var(--line); }
+  .shot-grid img:first-child{ grid-column:span 2; grid-row:span 2; height:100%; min-height:234px; }
+  @media (max-width:520px){
+    .shot-grid{ grid-template-columns:repeat(2,1fr); }
+    .shot-grid img:first-child{ grid-column:span 2; min-height:150px; height:150px; }
+  }
+
+  .soon-grid{ margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .soon-card{
+    border:2px dashed var(--line);
+    border-radius:var(--radius);
+    padding:34px 20px;
+    text-align:center;
+    color:var(--ink-soft);
+    background:rgba(139,92,246,0.04);
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .soon-card:hover{ border-color:var(--purple); background:rgba(139,92,246,0.1); }
+  .soon-folder{ font-size:2rem; display:block; margin-bottom:10px; }
+  .soon-title{ font-weight:700; font-size:0.95rem; color:#fff; }
+  .soon-tag{ font-size:0.78rem; margin-top:4px; }
+  @media (max-width:520px){ .soon-grid{ grid-template-columns:1fr; } }
+
+  /* EDUCATION */
+  .register{ border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .register-row{
+    display:grid; grid-template-columns:80px 1fr 110px;
+    gap:16px; padding:16px 20px;
+    border-bottom:1px solid var(--line);
+    align-items:center;
+    background:var(--card);
+  }
+  .register-row:last-child{ border-bottom:none; }
+  .register-row.head{ background:var(--panel); font-size:0.78rem; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; }
+  .register-row .yr{ font-weight:700; color:var(--blue); font-size:0.92rem; }
+  .register-row .institute{ font-weight:700; font-size:0.94rem; color:#fff; }
+  .register-row .institute small{ display:block; color:var(--ink-soft); font-weight:400; font-size:0.83rem; margin-top:2px; }
+  .register-row .score{ font-weight:700; color:#7fd99a; text-align:right; font-size:0.9rem; }
+
+  /* CONTACT */
+  .contact-panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:48px 36px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .contact-panel h2{ font-family:'Sora', sans-serif; font-weight:800; font-size:1.7rem; margin-bottom:12px; }
+  .contact-panel p{ color:var(--ink-soft); margin-bottom:28px; max-width:44ch; margin-left:auto; margin-right:auto; }
+  .contact-links{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .contact-links a{ font-weight:800; transition:transform .2s ease, box-shadow .2s ease; }
+  .contact-links a:hover{ transform:translateY(-3px) scale(1.04); }
+
+  footer{ padding:32px 0 60px; text-align:center; font-size:0.82rem; color:var(--ink-soft); }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  @media (max-width:700px){
+    .about-grid{ grid-template-columns:1fr; }
+    .register-row{ grid-template-columns:60px 1fr; }
+    .register-row .score{ grid-column:2; text-align:left; margin-top:2px; }
+    .register-row.head .score{ display:none; }
+    .nav-links{ gap:14px; font-size:0.8rem; }
+    section{ padding:44px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-mark">Janani<span>.M</span></div>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" style="border-top:none;">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="hero-tag"><span class="dot"></span> Open to work — Full Stack Developer</span>
+        <h1>I build clean, working web apps — <span class="grad">front to back.</span></h1>
+        <p class="sub">I'm <strong>Janani M</strong>, an MCA graduate (CGPA 9.1) from Cuddalore, Tamil Nadu, working across <strong>Node.js, Express, MySQL, and React</strong>.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#work">See my work</a>
+          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+          <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener">📄 Download Resume</a>
+        </div>
+      </div>
+      <div class="photo-ring">
+        <img src="profile.jpg" alt="Janani M">
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <div class="eyebrow">About</div>
+    <h2 class="sec-title">Fresh out of an MCA, not fresh to building things.</h2>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>I graduated with an <strong>MCA from Krishnasamy College of Engineering & Technology</strong> in 2026, after a BCA from Immaculate College for Women — both finished with a CGPA above 9.</p>
+        <p>I work mainly in the <strong>Node.js / Express / MySQL</strong> stack, with React on the front end when a project needs it, and Python/Flask when it doesn't.</p>
+        <p>Currently taking on freelance and full-time web development work, based in Cuddalore District and open to remote roles.</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat-row"><span class="k">Role</span><span class="v">Full Stack Developer</span></div>
+        <div class="stat-row"><span class="k">Based in</span><span class="v">Cuddalore, TN</span></div>
+        <div class="stat-row"><span class="k">Open to</span><span class="v">Remote / Pondicherry</span></div>
+        <div class="stat-row"><span class="k">Degree</span><span class="v">MCA, 2026</span></div>
+        <div class="stat-row"><span class="k">Status</span><span class="v">Available now</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="reveal">
+    <div class="eyebrow">Skills</div>
+    <h2 class="sec-title">What I build with</h2>
+    <div class="skill-numbered">
+      <div class="skill-num-card">
+        <span class="skill-num">01</span>
+        <div>
+          <div class="skill-num-title">Node.js & Express</div>
+          <div class="skill-num-desc">REST APIs, server logic, auth flows</div>
+        </div>
+      </div>
+      <div class="skill-num-card">
+        <span class="skill-num">02</span>
+        <div>
+          <div class="skill-num-title">MySQL</div>
+          <div class="skill-num-desc">Schema design, queries, data modeling</div>
+        </div>
+      </div>
+      <div class="skill-num-card">
+        <span class="skill-num">03</span>
+        <div>
+          <div class="skill-num-title">JavaScript & React</div>
+          <div class="skill-num-desc">Interactive UIs, component structure</div>
+        </div>
+      </div>
+      <div class="skill-num-card">
+        <span class="skill-num">04</span>
+        <div>
+          <div class="skill-num-title">Python & Flask</div>
+          <div class="skill-num-desc">Lightweight apps, data-driven tools</div>
+        </div>
+      </div>
+    </div>
+    <div class="cert-row">
+      <div class="cert-chip">
+        <span class="cert-icon">🎓</span>
+        <div>
+          <div class="cert-title">Full Stack Development — 30-Day Masterclass</div>
+          <div class="cert-sub">NoviTech R&D Pvt. Ltd. · Feb–Apr 2026</div>
+        </div>
+      </div>
+      <div class="cert-chip">
+        <span class="cert-icon">🏆</span>
+        <div>
+          <div class="cert-title">Best Paper Award — NCETEST '26</div>
+          <div class="cert-sub">St. Anne's College of Engineering & Technology</div>
+        </div>
+      </div>
+    </div>
+    <div class="learning-badge">
+      <span class="learning-dot"></span>
+      <span><strong>Currently learning:</strong> Software Testing — Postman → Manual Testing → JIRA → Selenium</span>
+    </div>
+  </section>
+
+  <section id="work" class="reveal">
+    <div class="eyebrow">Selected work</div>
+    <h2 class="sec-title">Projects</h2>
+
+    <div class="project">
+      <span class="project-tab">📁 academic-event-registration</span>
+      <span class="project-badge">★ Best Paper Award</span>
+      <div class="project-title">Cloud-Based Academic Event Registration & Digital Invitation System</div>
+      <p class="project-desc">MCA final year project — a full-stack platform supporting Convocation, Sports Day, and Annual Day registrations with student verification, automated PDF invitation generation, and an admin dashboard. Published in IRJMETS.</p>
+      <div class="project-stack">
+        <span class="stack-chip">Node.js</span>
+        <span class="stack-chip">Express.js</span>
+        <span class="stack-chip">MySQL</span>
+        <span class="stack-chip">PDFKit</span>
+        <span class="stack-chip">Multer</span>
+        <span class="stack-chip">Chart.js</span>
+      </div>
+      <a class="btn btn-primary live-demo-btn" href="https://academic-event-registration.onrender.com/" target="_blank" rel="noopener">▶ View Live Demo</a>
+      <div class="shot-grid">
+        <img src="project-shots/01-homepage.png" alt="Homepage" loading="lazy">
+        <img src="project-shots/02-registration.png" alt="Student registration form" loading="lazy">
+        <img src="project-shots/03-admin-dashboard.png" alt="Admin dashboard" loading="lazy">
+        <img src="project-shots/04-analytics.png" alt="Analytics charts" loading="lazy">
+        <img src="project-shots/05-invitation-pdf.png" alt="Generated invitation PDF" loading="lazy">
+      </div>
+    </div>
+
+    <div class="soon-grid">
+      <div class="soon-card">
+        <span class="soon-folder">⬆️</span>
+        <div class="soon-title">Upload project</div>
+        <div class="soon-tag">Space reserved — new work coming soon</div>
+      </div>
+      <div class="soon-card">
+        <span class="soon-folder">⬆️</span>
+        <div class="soon-title">Upload project</div>
+        <div class="soon-tag">Space reserved — new work coming soon</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="reveal">
+    <div class="eyebrow">Education</div>
+    <h2 class="sec-title">Academic record</h2>
+    <div class="register">
+      <div class="register-row head">
+        <span>Year</span><span>Institution</span><span>Score</span>
+      </div>
+      <div class="register-row">
+        <span class="yr">2026</span>
+        <span class="institute">Krishnasamy College of Engineering & Technology<small>Master of Computer Applications (MCA)</small></span>
+        <span class="score">9.1 CGPA</span>
+      </div>
+      <div class="register-row">
+        <span class="yr">2023</span>
+        <span class="institute">Immaculate College for Women<small>Bachelor of Computer Applications (BCA)</small></span>
+        <span class="score">9.16 CGPA</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal" style="border-bottom:1px solid var(--line);">
+    <div class="eyebrow">Contact</div>
+    <div class="contact-panel">
+      <h2>Let's build something.</h2>
+      <p>Open to freelance projects, full-time roles, and anything in between. Based in Cuddalore District, working with clients everywhere.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:jananimdevi@gmail.com">jananimdevi@gmail.com</a>
+        <a class="btn btn-ghost" href="https://github.com/jananim-dev" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/janani-m-358161273" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>designed &amp; built by Janani M — 2026</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
